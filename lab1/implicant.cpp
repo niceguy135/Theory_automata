@@ -85,11 +85,12 @@ void Implicant::SetPatched(bool value) {
 }
 
 void Implicant::PrintImplicant(uint8_t count) const {
-    char value = LogicValue(GetValue());
+    char value = LogicValueToChar(GetValue());
 
     for (uint8_t i = 0; i < count; ++i) {
         std::cout << value;
     }
+    std::cout << std::endl;
 }
 
 std::string Implicant::ImplicantStringRepr() const {

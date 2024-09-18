@@ -19,6 +19,8 @@ int main() {
     uint8_t function_size = (uint8_t) log2(func.size());
     std::cout << "Загруженная функция " << (uint16_t) function_size << " аргументы:" << std::endl;
 
+    std::cout << buff << std::endl;
+
     // debug print
     std::for_each(func.begin(), func.end(), [](Implicant& x) {
         std::cout << LogicValueToChar(x.GetValue());
@@ -27,10 +29,11 @@ int main() {
     std::cout << std::endl << "Таблица истинности для функции:" << std::endl;
     PrintVariables(std::cout, (uint8_t)function_size);
 
-    for_each(func.begin(), func.end(), [&function_size](Implicant& impl) {
+    std::for_each(func.begin(), func.end(), [&function_size](Implicant& impl) {
         impl.PrintImplicant(function_size);
     });
 
+    std::cout << std::endl;
     // M1: отфильтруйте ложные значения. Считайте '-' как '1'
     std::vector<Implicant> m_1;
 
