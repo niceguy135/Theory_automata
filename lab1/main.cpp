@@ -33,21 +33,29 @@ int main() {
         impl.PrintImplicant(function_size);
     });
 
+    std::vector<Implicant> prev;
+    std::remove_copy_if(func.begin(), func.end(), back_inserter(prev), [](const Implicant& x) {
+        return x.GetValue() == FALSE;
+    });
+    std::cout << "Исходная СДНФ:" << std::endl;
+    Implicant::PrintVector(prev);
+
     std::cout << std::endl;
-    // M1: отфильтруйте ложные значения. Считайте '-' как '1'
+    // M1: Список 1 импликант после всевозможных слеек
     std::vector<Implicant> m_1;
 
-    std::remove_copy_if(func.begin(), func.end(), back_inserter(m_1), [](const Implicant& x) {
+    std::remove_copy_if(func.begin(), func.end(), back_inserter(m_1), [](Implicant& x) {
+        x.SetPatched(true);
         return x.GetValue() == FALSE;
     });
 
-    std::cout << "M1:" << std::endl;
+    std::cout << "Список 1 импликант после всевозможных слеек:" << std::endl;
     Implicant::PrintVector(m_1);
 
     std::cout << std::endl;
 
-    // M2: патчинг значений
-    std::cout << "M2:" << std::endl;
+    // M2: Cписок формированный в результате склеек импликант из листа 1
+    std::cout << "Cписок формированный в результате склеек импликант из листа 1:" << std::endl;
 
     std::vector<Implicant> m_2;
     Implicant::PatchVectors(m_1, m_2);
@@ -55,8 +63,8 @@ int main() {
 
     std::cout << std::endl;
 
-    // M3: пропачим M2 один раз
-    std::cout << "M3:" << std::endl;
+    // M3: Текущий список список 2, после всевозможных склеек
+    std::cout << "Текущий список список-2, после всевозможных склеек:" << std::endl;
     std::vector<Implicant> m_3;
     Implicant::PatchVectors(m_2, m_3);
     Implicant::PrintVector(m_3);
@@ -65,8 +73,8 @@ int main() {
 
     int tmp = 0;
 
-    // M4:  патч M3 до тех пор, пока исправление не станет невозможным
-    std::cout << "M4: " << std::endl;
+    // M4: Итоговый список, соответствующий ТДНФ
+    std::cout << "Итоговый список, соответствующий ТДНФ:" << std::endl;
     std::vector<Implicant> m_4;
     std::vector<Implicant> m_4_prev;
 

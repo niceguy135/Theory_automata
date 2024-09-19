@@ -26,11 +26,13 @@ public:
     bool WasPatched() const;
 
     bool CanPatch(const Implicant& other) const;
+    // количество единиц в выражении разности index_
     uint16_t GetDiffPopcount(const Implicant& other) const;
 
     bool operator==(const Implicant& other) const;
     bool operator!=(const Implicant& other) const;
 
+    // Слейка двух импликант
     Implicant Patch(Implicant &other);
     void SetPatched(bool value);
 
@@ -42,12 +44,13 @@ public:
     static void PrintSet(std::set<Implicant>& vec);
     static void PatchVectors(std::vector<Implicant>& source, std::vector<Implicant>& target, bool verbose = false);
     static void PrintTable(std::vector<Implicant> func, std::vector<Implicant> dnf, const uint8_t& func_size);
+
 private:
     Implicant(const Implicant& other, uint16_t patch);
 
 private:
-    uint16_t index_;
-    LogicValue value_;
+    uint16_t index_; // номер импликанты 
+    LogicValue value_; // значение импликанты
     bool was_patched_;
-    uint16_t patch_;
+    uint16_t patch_; // слейка
 };
