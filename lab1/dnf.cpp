@@ -52,16 +52,16 @@ void DNF::Minimize() {
 
     while (!finish) {
         for (int i = 0; i < n; ++i) {
-            std::set<int> test_extra;
+            std::set<int> tmp;
 
             for (int j = 0; j < n; ++j) {
                 if (j != i) {
                     for (int k = 0; k < table[j].size(); ++k) {
-                        test_extra.insert(table[j][k]);
+                        tmp.insert(table[j][k]);
                     }
                 }
             }
-            if (test_extra.size() == m) {
+            if (tmp.size() == m) {
                 table.erase(table.begin() + i);
                 tdnf.erase(tdnf.begin() + i);
                 --n;
