@@ -1,4 +1,6 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.6)
 project(app)
 
-add_executable(${PROJECT_NAME} main.cpp implicant.cpp utils.cpp)
+set(CMAKE_CXX_STANDARD 20)
+
+add_executable(${PROJECT_NAME} main.cpp impl.cpp dnf.cpp streamData.cpp)
