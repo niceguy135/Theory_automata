@@ -2,6 +2,8 @@
 
 #include <numeric>
 #include <cmath>
+#include <array>
+#include <set>
 
 DNF::DNF(std::string str) {
     for (int i = 0; i < str.size(); ++i) {
@@ -77,6 +79,11 @@ void DNF::Minimize() {
 }
 
 void DNF::print(std::ostream &os) const {
+    for (int index = 0; index < len_param; ++index) {
+        os << getVar(index);
+    }
+    os << std::endl;
+
     for (int i = 0; i < impls.size(); ++i) {
         for (int j = 0; j < len_param; ++j) {
             if ((impls[i].P >> (len_param - j - 1)) % 2 == 1) {
@@ -89,6 +96,8 @@ void DNF::print(std::ostream &os) const {
     }
 }
 
-Impl& DNF::getImpl(int index) {
-    return impls[index];
+char DNF::getVar(int index) const {
+    static std::array<char, 4> symbols{'x', 'y', 'z', 'u'};
+
+    return symbols[index];
 }

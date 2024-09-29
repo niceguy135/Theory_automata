@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <iostream>
-#include <set>
+#include <utility>
 
 #include "impl.h"
 
@@ -12,10 +12,12 @@ public:
 
     void Minimize();
     void print(std::ostream &os) const;
-    Impl& getImpl(int index);
+
+private:
+    char getVar(int index) const;
 
 private:
     std::vector<Impl> impls;
     std::vector<Impl> sdnf;
-    int len_param=0;
+    int len_param = 0;
 };
