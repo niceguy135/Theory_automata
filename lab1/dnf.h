@@ -17,7 +17,7 @@ private:
     char getVar(int index) const;
 
 private:
-    std::vector<Impl> impls;
-    std::vector<Impl> sdnf;
+    std::vector<Implicant> impls;
+    std::vector<Implicant> sdnf;
     int len_param = 0;
 };

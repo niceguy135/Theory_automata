@@ -3,15 +3,12 @@
 #include <stdexcept>
 #include <iostream>
 
-Impl::Impl(int num) 
-    : Num(num)
-    , Ind(Impl::count(num))
-    , P(0)
-    , Pw(false)
-    , Inf(false)
+Implicant::Implicant(int num) 
+    : Num(num), Ind(Implicant::count(num))
+    , P(0), Pw(false), Inf(false)
 {}
 
-int Impl::count(int num) {
+int Implicant::count(int num) {
     int cnt = 0;
     while (num) {
         cnt += num % 2;
@@ -21,15 +18,21 @@ int Impl::count(int num) {
     return cnt;
 }
 
-std::optional<Impl> Impl::patch(Impl &lhs, Impl &rhs) {
-    if (lhs.Num < rhs.Num
-        && lhs.P == rhs.P
-        && ((rhs.Ind - lhs.Ind) == 1)
-        && (Impl::count(rhs.Num - lhs.Num) == 1)) {
+bool Implicant::check(Implicant &lhs, Implicant &rhs){
+    bool check_1 = lhs.Num < rhs.Num;
+    bool check_2 = lhs.P == rhs.P;
+    bool check_3 = ((rhs.Ind - lhs.Ind) == 1);
+    bool check_4 = (Implicant::count(rhs.Num - lhs.Num) == 1);
+
+    return check_1 && check_2 && check_3 && check_4;
+}
+
+std::optional<Implicant> Implicant::patch(Implicant &lhs, Implicant &rhs) {
+    if (Implicant::check(lhs, rhs)) {
         lhs.Pw = 1;
         rhs.Pw = 1;
 
-        Impl other(lhs.Num);
+        Implicant other(lhs.Num);
         other.P = (rhs.Num - lhs.Num) + lhs.P;
         
         return other;

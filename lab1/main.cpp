@@ -9,17 +9,13 @@
 #include "streamData.h"
 
 int main(int argc, char *argv[]) {
-    std::unique_ptr<streamData> stream;
+    std::unique_ptr<streamDataFile> stream;
     std::string read;
     std::string write;
-    
-    if (argc >= 3) {
-        read = argv[1];
-        write = argv[2];
-        stream = streamData::create<streamDataFile>(read, write);
-    } else {
-        stream = streamData::create<streamDataConsole>(std::cin, std::cout);
-    }
+
+    read = argv[1];
+    write = argv[2];
+    stream = streamDataFile::create<streamDataFile>(read, write);
 
     std::string str = stream->readData();
     DNF dnf(str);

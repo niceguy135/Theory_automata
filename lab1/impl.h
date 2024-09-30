@@ -2,12 +2,12 @@
 
 #include <optional>
 
-class Impl {
+class Implicant {
 public:
-    Impl(int num);
+    Implicant(int num);
 
-    static int count(int num);
-    static std::optional<Impl> patch(Impl &lhs, Impl &rhs);
+    static std::optional<Implicant> patch(Implicant &lhs, Implicant &rhs);
+    static bool check(Implicant &lhs, Implicant &rhs);
 
 public:
     int Num;
@@ -15,4 +15,5 @@ public:
     int P;
     bool Pw;
     bool Inf;
+    static int count(int num);
 };

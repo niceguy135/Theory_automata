@@ -31,20 +31,3 @@ std::string streamDataFile::readData() {
 void streamDataFile::writeData(const DNF &dnf) {
     dnf.print(writeStream);
 }
-
-streamDataConsole::streamDataConsole(std::istream &in, std::ostream &out)
-    : readStream(in)
-    , writeStream(out)
-{}
-
-std::string streamDataConsole::readData() {
-    std::string line;
-
-    readStream.get() >> line;
-
-    return line;
-}
-
-void streamDataConsole::writeData(const DNF &dnf) {
-    dnf.print(writeStream.get());
-}
