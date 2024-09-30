@@ -3,5 +3,5 @@ build
 app
 *.cmake
 CMakeCache.txt
-CMakeFiles/*
+*/CMakeFiles/*
 Makefile

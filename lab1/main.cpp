@@ -19,7 +19,9 @@ int main(int argc, char *argv[]) {
 
     std::string str = stream->readData();
     DNF dnf(str);
+    std::cout << "Fuck\n"; 
     dnf.Minimize();
+    std::cout << "Shit\n";
     stream->writeData(dnf);
 
 	return 0;

@@ -17,8 +17,9 @@ DNF::DNF(std::string str) {
     len_param = log2(str.size());
 }
 
-void patch_process(std::vector<Implicant> &impls, std::vector<Implicant> &impls_temp, std::vector<Implicant> tdnf){
-        while (impls.size() > 0) {
+void patch_process(std::vector<Implicant> &impls, std::vector<Implicant> &impls_temp, std::vector<Implicant> &tdnf){
+    while (impls.size() > 0) {
+        
         for (int i = 0; i < impls.size(); ++i) {
             for (int j = i; j < impls.size(); ++j) {
                 auto impl = Implicant::patch(impls[i], impls[j]);
