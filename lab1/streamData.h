@@ -15,9 +15,6 @@ public:
     virtual std::string readData() = 0;
     virtual void writeData(const DNF &dnf) = 0;
 
-    template <typename streamType>
-    struct Factory;
-
     template <typename streamType, typename ...Args>
     static std::unique_ptr<streamData> create(Args&& ...args) {
         return std::make_unique<streamType>(std::forward<Args>(args)...);
