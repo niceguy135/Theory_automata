@@ -89,7 +89,16 @@ void DNF::print(std::ostream &os) const {
             if ((impls[i].P >> (len_param - j - 1)) % 2 == 1) {
                 os << "-";
             } else {
-                os << ((impls[i].Num >> (len_param - j - 1)) % 2);
+                auto integer = ((impls[i].Num >> (len_param - j - 1)) % 2);
+#ifdef PERFECT_OUT
+                if (integer == 1) {
+                    os << "\033[1;32m" << integer << "\033[0m";
+                } else {
+                    os << "\033[1;31m" << integer << "\033[0m";
+                }
+#else
+                os << integer;
+#endif
             }
         }
         os << std::endl;
