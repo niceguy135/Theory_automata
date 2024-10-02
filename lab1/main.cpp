@@ -1,16 +1,19 @@
 #include <iostream>
-#include <string>
-#include <vector> 
+#include <string> 
 #include <set>
 #include <memory>
 #include <thread>
+#include <deque>
 #include <mutex> 
+
+#include <boost/asio/thread_pool.hpp>
+#include <boost/asio/post.hpp>
 
 #include "impl.h"
 #include "dnf.h"
 #include "streamData.h"
 
-void generation(const std::string &table, size_t index, std::vector<std::string> &result) {
+void generation(const std::string &table, size_t index, std::deque<std::string> &result) {
     if (index >= table.size()) {
         result.push_back(table);
         return;
@@ -30,8 +33,8 @@ void generation(const std::string &table, size_t index, std::vector<std::string>
     }
 }
 
-std::vector<std::string> AllCombination(std::string &table) {
-    std::vector<std::string> result;
+std::deque<std::string> AllCombination(std::string &table) {
+    std::deque<std::string> result;
     generation(table, 0, result);
     return result;
 }
@@ -54,15 +57,14 @@ int main(int argc, char *argv[]) {
 #ifdef MULTITHREAD
     auto combinations = AllCombination(str);
 
-    std::mutex oibound;
+    std::mutex iobound;
+    boost::asio::thread_pool pool(std::thread::hardware_concurrency());
     int count = 1;
-    std::vector<std::thread> threads;
     for (auto& table : combinations) {
-        threads.emplace_back([&stream, &table, &oibound, &count]() -> void {
+        boost::asio::post(pool, [&iobound, &stream, table, &count]() -> void {
             DNF dnf(table);
             dnf.Minimize();
-
-            std::lock_guard<std::mutex> lock(oibound);
+            std::lock_guard<std::mutex> lock(iobound);
 #ifdef PERFECT_OUT
             std::cout << "\033[1;33m" << "МДНФ №" << count << "\033[0m" << std::endl;
             std::cout << "\033[1;33m" << "Изначальная таблица: " << "\033[0m" << "\033[1;34m" << table <<"\033[0m" << std::endl; 
@@ -72,11 +74,7 @@ int main(int argc, char *argv[]) {
         });
     }
 
-    for (auto& thread : threads) {
-        if (thread.joinable()) {
-            thread.join();
-        }
-    }
+    pool.join();
 #else
     DNF dnf(str);
     dnf.Minimize();
