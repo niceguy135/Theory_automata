@@ -54,31 +54,48 @@ int main(int argc, char *argv[]) {
 
     std::string str = stream->readData();
 
-#ifdef MULTITHREAD
-    auto combinations = AllCombination(str);
 
+    auto combinations = AllCombination(str);
+// 101011-0101-01-1-011-1-1-01-0-10-1010011100-010010-0111100110
+// no_thread 17,420
+// threads 11,121
+
+// 101011-0101--01-1-011-1-1-01-0-10-1010011100-010010-0111100110
+// no_thread 55,408
+// threads 36,915
+
+#ifdef MULTITHREAD
     std::mutex iobound;
     boost::asio::thread_pool pool(std::thread::hardware_concurrency());
-    int count = 1;
+    int count = 0;
     for (auto& table : combinations) {
-        boost::asio::post(pool, [&iobound, &stream, table, &count]() -> void {
+        boost::asio::post(pool, [&iobound, &stream, &count, &table]() -> void {
             DNF dnf(table);
             dnf.Minimize();
+
             std::lock_guard<std::mutex> lock(iobound);
 #ifdef PERFECT_OUT
             std::cout << "\033[1;33m" << "МДНФ №" << count << "\033[0m" << std::endl;
             std::cout << "\033[1;33m" << "Изначальная таблица: " << "\033[0m" << "\033[1;34m" << table <<"\033[0m" << std::endl; 
+            ++count;
 #endif
             stream->writeData(dnf);
-            ++count;
         });
     }
 
     pool.join();
 #else
-    DNF dnf(str);
-    dnf.Minimize();
-    stream->writeData(dnf);
+    int count = 0;
+    for (auto &table : combinations) {
+        DNF dnf(table);
+        dnf.Minimize();
+#ifdef PERFECT_OUT
+        std::cout << "\033[1;33m" << "МДНФ №" << count << "\033[0m" << std::endl;
+        std::cout << "\033[1;33m" << "Изначальная таблица: " << "\033[0m" << "\033[1;34m" << table <<"\033[0m" << std::endl; 
+        ++count;
+#endif
+        stream->writeData(dnf);
+    }
 #endif
 
 	return 0;
