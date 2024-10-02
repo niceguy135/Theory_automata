@@ -106,7 +106,7 @@ void DNF::print(std::ostream &os) const {
 }
 
 char DNF::getVar(int index) const {
-    static std::array<char, 4> symbols{'x', 'y', 'z', 'u'};
+    static std::array<char, 9> symbols{'x', 'y', 'z', 'u', 'a', 'b', 'c', 'd', 'g'};
 
     return symbols[index];
 }
