@@ -14,13 +14,14 @@
 #include "streamData.h"
 
 void generation(const std::string &table, size_t index, std::deque<std::string> &result, int &count) {
-    if (index >= table.size()) {
+    if (index == table.size()) {
+        ++count;
         result.push_back(table);
         return;
     }
 
     if (table[index] != '-') {
-       generation(table, index + 1, result, ++count);
+       generation(table, index + 1, result, count);
     } else {
         std::string zero = table;
         std::string one = table;
@@ -28,8 +29,8 @@ void generation(const std::string &table, size_t index, std::deque<std::string> 
         zero[index] = '0';
         one[index] = '1';
 
-        generation(zero, index + 1, result, ++count);
-        generation(one, index + 1, result, ++count);
+        generation(zero, index + 1, result, count);
+        generation(one, index + 1, result, count);
     }
 }
 
@@ -54,7 +55,7 @@ int main(int argc, char *argv[]) {
 
     std::string str = stream->readData();
 
-    int cnt_combi = 0;
+    int cnt_combi = 1;
     auto combinations = AllCombination(str, cnt_combi);
 
 // 101011-0101-01-1-011-1-1-01-0-10-1010011100-010010-0111100110
