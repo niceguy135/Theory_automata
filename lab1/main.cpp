@@ -58,6 +58,9 @@ int main(int argc, char *argv[]) {
     int cnt_combi = 1;
     auto combinations = AllCombination(str, cnt_combi);
 
+    DNF dnf(str);
+    dnf.Minimize();
+    stream->writeData(dnf);
 // 101011-0101-01-1-011-1-1-01-0-10-1010011100-010010-0111100110
 // no_thread 17,420
 // threads 11,121
@@ -66,39 +69,39 @@ int main(int argc, char *argv[]) {
 // no_thread 55,408
 // threads 36,915
 
-    if (cnt_combi > 128) {
-        std::mutex iobound;
-        boost::asio::thread_pool pool(std::thread::hardware_concurrency());
-        int count = 0;
-        for (auto& table : combinations) {
-            boost::asio::post(pool, [&iobound, &stream, &count, &table]() -> void {
-                DNF dnf(table);
-                dnf.Minimize();
+    // if (cnt_combi > 128) {
+    //     std::mutex iobound;
+    //     boost::asio::thread_pool pool(std::thread::hardware_concurrency());
+    //     int count = 0;
+    //     for (auto& table : combinations) {
+    //         boost::asio::post(pool, [&iobound, &stream, &count, &table]() -> void {
+    //             DNF dnf(table);
+    //             dnf.Minimize();
 
-                std::lock_guard<std::mutex> lock(iobound);
-    #ifdef PERFECT_OUT
-                std::cout << "\033[1;33m" << "МДНФ №" << count << "\033[0m" << std::endl;
-                std::cout << "\033[1;33m" << "Изначальная таблица: " << "\033[0m" << "\033[1;34m" << table <<"\033[0m" << std::endl;
-                ++count;
-    #endif
-                stream->writeData(dnf);
-            });
-        }
+    //             std::lock_guard<std::mutex> lock(iobound);
+    // #ifdef PERFECT_OUT
+    //             std::cout << "\033[1;33m" << "МДНФ №" << count << "\033[0m" << std::endl;
+    //             std::cout << "\033[1;33m" << "Изначальная таблица: " << "\033[0m" << "\033[1;34m" << table <<"\033[0m" << std::endl;
+    //             ++count;
+    // #endif
+    //             stream->writeData(dnf);
+    //         });
+    //     }
 
-        pool.join();
-    } else {
-        int count = 0;
-        for (auto &table : combinations) {
-            DNF dnf(table);
-            dnf.Minimize();
-    #ifdef PERFECT_OUT
-            std::cout << "\033[1;33m" << "МДНФ №" << count << "\033[0m" << std::endl;
-            std::cout << "\033[1;33m" << "Изначальная таблица: " << "\033[0m" << "\033[1;34m" << table <<"\033[0m" << std::endl; 
-            ++count;
-    #endif
-            stream->writeData(dnf);
-        }
-    }
+    //     pool.join();
+    // } else {
+    //     int count = 0;
+    //     for (auto &table : combinations) {
+    //         DNF dnf(table);
+    //         dnf.Minimize();
+    // #ifdef PERFECT_OUT
+    //         std::cout << "\033[1;33m" << "МДНФ №" << count << "\033[0m" << std::endl;
+    //         std::cout << "\033[1;33m" << "Изначальная таблица: " << "\033[0m" << "\033[1;34m" << table <<"\033[0m" << std::endl; 
+    //         ++count;
+    // #endif
+    //         stream->writeData(dnf);
+    //     }
+    // }
 
 	return 0;
 }
