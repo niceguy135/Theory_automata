@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
     std::unique_ptr<streamData> stream;
     stream = streamData::create<streamDataConsole>(std::cin, std::cout);
 
-    Mealy mealy(std::string("../f_table.txt"), std::string("../g_table.txt"));
+    Mure mealy(std::string("../f_table.txt"), std::string("../g_table.txt"));
     std::map<std::string, std::unordered_set<std::string>> minimize;
     mealy.coddingStates();
     mealy.generateDTriggerSndf(minimize);

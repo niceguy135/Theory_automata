@@ -4,7 +4,7 @@
 #include <cmath>
 #include <sstream>
 
-Mealy::Mealy(const std::string& state_path, const std::string& output_path) {
+Mure::Mure(const std::string& state_path, const std::string& output_path) {
     prepareInputs(state_path);
     
     std::ifstream file;
@@ -17,29 +17,15 @@ Mealy::Mealy(const std::string& state_path, const std::string& output_path) {
     std::string line;
     
     auto it = inputs.begin();
-    while (std::getline(file, line)) {
-        for (int index = 0; index < line.size(); ++index) {
-            transition_state[state + std::to_string(index + 1)].emplace_back(state + std::string(1, line[index]), it->first);
-        }
-        it = std::next(it);
-    }
-    file.close();
-
-    file.open(output_path);
-    if (!file.is_open()) {
-        throw std::logic_error("failed open read file");
-    }
-
-    it = inputs.begin();
     std::string output(2, 'y');
     while (std::getline(file, line)) {
         for (int index = 0; index < line.size(); ++index) {
             output[1] = line[index];
+            transition_state[state + std::to_string(index + 1)].emplace_back(state + std::string(1, line[index]), it->first);
             transition_output[state + std::to_string(index + 1)].emplace_back(output, it->first);
         }
         it = std::next(it);
     }
-
     file.close();
 
     // максимальное нужное значение регистров
@@ -47,7 +33,7 @@ Mealy::Mealy(const std::string& state_path, const std::string& output_path) {
     std::cout << std::endl << "Количество триггеров: " << countTriggers << std::endl;
 }
 
-void Mealy::printState() {
+void Mure::printState() {
     std::cout << "   ";
     for (auto it = transition_state.begin(); it != transition_state.end(); ++it) {
         std::cout << it->first << " ";
@@ -67,7 +53,7 @@ void Mealy::printState() {
     }
 }
 
-void Mealy::printOutput() {
+void Mure::printOutput() {
     std::cout << "   ";
     for (auto it = transition_output.begin(); it != transition_output.end(); ++it) {
         std::cout << it->first << " ";
@@ -87,7 +73,7 @@ void Mealy::printOutput() {
     }
 }
 
-void Mealy::prepareInputs(const std::string &path) {
+void Mure::prepareInputs(const std::string &path) {
     std::ifstream file;
     file.open(path);
     if (!file.is_open()) {
@@ -119,7 +105,7 @@ void Mealy::prepareInputs(const std::string &path) {
     file.close();
 }
 
-void Mealy::coddingStates() {
+void Mure::coddingStates() {
     int code = std::pow(2, countTriggers) - 1;
     auto it = transition_state.begin();
     while (codeState.size() != transition_state.size() && it != transition_state.end() && code >= 0) {
@@ -147,7 +133,7 @@ void Mealy::coddingStates() {
     }
 }
 
-void Mealy::generateDTriggerSndf(std::map<std::string, std::unordered_set<std::string>> &res) {
+void Mure::generateDTriggerSndf(std::map<std::string, std::unordered_set<std::string>> &res) {
     std::cout << std::endl << "СДНФ для функций возбуждения D-триггеров" << std::endl;
 
     for (int index = 0; index < countTriggers; ++index) {
@@ -192,7 +178,7 @@ void Mealy::generateDTriggerSndf(std::map<std::string, std::unordered_set<std::s
     }
 }
 
-void Mealy::generateOutputSndf(std::map<std::string, std::unordered_set<std::string>> &res) {
+void Mure::generateOutputSndf(std::map<std::string, std::unordered_set<std::string>> &res) {
     std::cout << std::endl << "СДНФ для выходов" << std::endl;
 
     for (int index = 0; index < countTriggers; ++index) {
@@ -238,7 +224,7 @@ void Mealy::generateOutputSndf(std::map<std::string, std::unordered_set<std::str
 }
 
 
-std::deque<std::string> Mealy::format(std::map<std::string, std::unordered_set<std::string>> &res) {
+std::deque<std::string> Mure::format(std::map<std::string, std::unordered_set<std::string>> &res) {
     std::deque<std::string> result;
     int countBit = res.begin()->second.begin()->size();
     

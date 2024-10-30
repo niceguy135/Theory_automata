@@ -12,9 +12,9 @@ public:
     virtual ~Machine() = default;
 };
 
-class Mealy : public Machine {
+class Mure : public Machine {
 public:
-    Mealy(const std::string& state_path, const std::string& output_path);
+    Mure(const std::string& state_path, const std::string& output_path);
 
     void prepareInputs(const std::string &path);
     void coddingStates();
