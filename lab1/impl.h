@@ -8,7 +8,11 @@ public:
 
     static int count(int num);
     static std::optional<Impl> patch(Impl &lhs, Impl &rhs);
-
+    
+    bool operator==(const Impl &impl) const {
+        return this->Num == impl.Num && this->P == impl.P;
+    }
+    
 public:
     int Num;
     int Ind;

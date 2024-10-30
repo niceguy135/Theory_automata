@@ -50,32 +50,57 @@ void DNF::Minimize() {
         }
     }
 
+
+    auto tdnf_const = tdnf;
+
+    std::set<int> test_extra;
     bool finish = false;
+    std::vector<std::vector<Impl>> result;
+    auto table_const = table;
+    auto tdnf_const_var = tdnf;
+    int i;
+    
+    for (int k = 0; k < n; ++k) {
+        for (int t = 0; t < n; ++t) {
+            while (!finish) {
+                for (int i = t; i < n; ++i) {
+                    test_extra.clear();
 
-    while (!finish) {
-        for (int i = 0; i < n; ++i) {
-            std::set<int> tmp;
-
-            for (int j = 0; j < n; ++j) {
-                if (j != i) {
-                    for (int k = 0; k < table[j].size(); ++k) {
-                        tmp.insert(table[j][k]);
+                    for (int j = 0; j < n; ++j) {
+                        if (j != i) {
+                            for (int k = 0; k < table[j].size(); ++k) {
+                                test_extra.insert(table[j][k]);
+                            }
+                        }
+                    }
+                    if (test_extra.size() == m) {
+                        table.erase(table.begin() + i);
+                        tdnf.erase(tdnf.begin() + i);
+                        --n;
+                        finish = false;
+                        break;
+                    } else {
+                        finish = true;
                     }
                 }
+                i = 0;
             }
-            if (tmp.size() == m) {
-                table.erase(table.begin() + i);
-                tdnf.erase(tdnf.begin() + i);
-                --n;
-                finish = false;
-                break;
-            } else {
-                finish = true;
-            }
+        }
+        result.push_back(tdnf);
+        table = table_const;
+        tdnf = tdnf;
+    }
+
+    impls = tdnf_const;
+    for (auto& vec : result) {
+        if (vec.size() < impls.size()) {
+            impls = vec;
         }
     }
 
-    impls = tdnf;
+    for (auto& impl : impls) {
+        unq.insert(impl);
+    }
 }
 
 void DNF::print(std::ostream &os) const {
@@ -84,20 +109,25 @@ void DNF::print(std::ostream &os) const {
     }
     os << std::endl;
 
-    for (int i = 0; i < impls.size(); ++i) {
+    for (auto& impl : unq) {
         for (int j = 0; j < len_param; ++j) {
-            if ((impls[i].P >> (len_param - j - 1)) % 2 == 1) {
+            if ((impl.P >> (len_param - j - 1)) % 2 == 1) {
                 os << "-";
             } else {
-                os << ((impls[i].Num >> (len_param - j - 1)) % 2);
+                auto integere = ((impl.Num >> (len_param - j - 1)) % 2);
+                if (integere == 1) {
+                    os << "\033[1;32m" << integere << "\033[0m"; 
+                } else {
+                    os << "\033[1;31m" << integere << "\033[0m";
+                }
             }
         }
-        os << std::endl;
+        std::cout << std::endl;
     }
 }
 
-char DNF::getVar(int index) const {
-    static std::array<char, 4> symbols{'x', 'y', 'z', 'u'};
+std::string DNF::getVar(int index) const {
+    static std::array<std::string, 9> symbols{"Q0", "Q1", "Q2", "X0", "X1", "X2", "Q5", "Q7", "Q8"};
 
     return symbols[index];
 }
