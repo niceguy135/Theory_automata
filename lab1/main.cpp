@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
     std::unique_ptr<streamData> stream;
     stream = streamData::create<streamDataConsole>(std::cin, std::cout);
 
-    Mure mure(std::string("../f_table.txt"));
+    Mure mure(std::string("./f_table.txt"));
     std::map<std::string, std::unordered_set<std::string>> minimize;
     mure.coddingStates();
     mure.generateDTriggerSndf(minimize);

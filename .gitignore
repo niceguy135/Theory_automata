@@ -1,2 +1,7 @@
 build
 .vscode
+Makefile
+app
+CMakeCache.txt
+*.cmake
+CMakeFiles/

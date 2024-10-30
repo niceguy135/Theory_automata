@@ -3,6 +3,7 @@
 #include <fstream>
 #include <cmath>
 #include <sstream>
+#include <bitset>
 
 Mure::Mure(const std::string& state_path) {
     prepareInputs(state_path);
