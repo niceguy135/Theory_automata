@@ -4,7 +4,7 @@
 #include <cmath>
 #include <sstream>
 
-Mure::Mure(const std::string& state_path, const std::string& output_path) {
+Mure::Mure(const std::string& state_path) {
     prepareInputs(state_path);
     
     std::ifstream file;

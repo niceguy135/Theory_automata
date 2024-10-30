@@ -14,7 +14,7 @@ public:
 
 class Mure : public Machine {
 public:
-    Mure(const std::string& state_path, const std::string& output_path);
+    Mure(const std::string& state_path);
 
     void prepareInputs(const std::string &path);
     void coddingStates();

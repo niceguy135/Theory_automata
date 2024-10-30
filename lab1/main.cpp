@@ -15,11 +15,11 @@ int main(int argc, char *argv[]) {
     std::unique_ptr<streamData> stream;
     stream = streamData::create<streamDataConsole>(std::cin, std::cout);
 
-    Mure mealy(std::string("../f_table.txt"), std::string("../g_table.txt"));
+    Mure mure(std::string("../f_table.txt"));
     std::map<std::string, std::unordered_set<std::string>> minimize;
-    mealy.coddingStates();
-    mealy.generateDTriggerSndf(minimize);
-    mealy.generateOutputSndf(minimize);
+    mure.coddingStates();
+    mure.generateDTriggerSndf(minimize);
+    mure.generateOutputSndf(minimize);
 
     for (auto &pair : minimize) {
         std::cout << pair.first << " ";
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
         std::cout << std::endl;
     }
 
-    auto deq = mealy.format(minimize);
+    auto deq = mure.format(minimize);
 
     auto it = minimize.begin();
     while (!deq.empty()) {
