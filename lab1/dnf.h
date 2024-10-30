@@ -31,7 +31,7 @@ public:
     void print(std::ostream &os) const;
 
 private:
-    char getVar(int index) const;
+    std::string getVar(int index) const;
 
 private:
     std::unordered_set<Impl, hashImpl, ImplEq> unq;

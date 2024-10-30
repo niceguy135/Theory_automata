@@ -12,6 +12,8 @@ class streamDataConsole;
 
 class streamData {
 public:
+    virtual ~streamData() = default;
+
     virtual std::string readData() = 0;
     virtual void writeData(const DNF &dnf) = 0;
 
